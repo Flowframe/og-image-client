@@ -4,7 +4,7 @@ This Laravel package allows you to easily create Open Graph images for your appl
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/og-image-client.jpg?t=1" width="419px" />](https://flowfra.me/github-ad-click)
+[<img src="https://flowfra.me/github-ad.png" width="419px" />](https://flowfra.me/github-ad-click)
 
 Like our work? You can support us by sponsoring or purchasing one of our products and services.
 
@@ -29,9 +29,9 @@ Once you have setup up the server you can start using the client side package.
 First, setup your `.env`:
 
 ```
-OG_IMAGE_URL=<your_og_image_server_url>
+OG_IMAGE_URL=<your_server_url>
 
-OG_IMAGE_SECRET_TOKEN=<your_secret_image_token>
+OG_IMAGE_SECRET_TOKEN=<your_secret_token_from_server>
 ```
 
 And then generate your image:
