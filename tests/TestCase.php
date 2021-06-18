@@ -2,8 +2,8 @@
 
 namespace Flowframe\OgImageClient\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use Flowframe\OgImageClient\OgImageClientServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
