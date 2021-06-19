@@ -29,17 +29,21 @@ Once you have setup up the server you can start using the client side package.
 First, setup your `.env`:
 
 ```
-OG_IMAGE_URL=<your_server_url>
+OG_IMAGE_URL=<your_server_url> // https://your-app-on.vercel.com/api
+
+OG_IMAGE_TEMPLATE_PATH=<your_template_path> // default _og-image, we recommend to keep this
 
 OG_IMAGE_SECRET_TOKEN=<your_secret_token_from_server>
 ```
 
+_Don't forget to add the /api suffix._
+
 And then generate your image:
 
 ```php
-// helper function, you can also use the Facade: `OgImageClient::create(...)`
-og([
-    'template' => '_og-images/example' // resources/views/_og-images/example.blade.php
+// helper function, you can also use the Facade: `OgImageClient::generate(...)`
+$image = og()->generate([
+    'template' => '_og-images/example', // resources/views/_og-images/example.blade.php
 
     // Attributes which will be used in the template view
     'title' => 'Hello Flowframe',
@@ -50,9 +54,26 @@ og([
         'Wow',
         'Much',
         'Cool',
-    ];
+    ],
 ]);
 ```
+
+When developing locally you can also preview your image by doing:
+
+```php
+return og()->preview([
+    'template' => '_og-images/example',
+    'title' => 'Hello Flowframe',
+    'subtitle' => 'How are you doing?',
+    'options' => [
+        'Wow',
+        'Much',
+        'Cool',
+    ],
+]);
+```
+
+This will render the template with data.
 
 ### Templates
 

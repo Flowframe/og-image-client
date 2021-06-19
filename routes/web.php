@@ -11,8 +11,8 @@ Route::get('_og-image', function () {
 
     abort_unless($signature, 400, 'Missing signature.');
 
-    $decodedPayload = OgImageClient::decodePayload($payload);
-    $signatureIsValid = OgImageClient::verifySignature($decodedPayload, $signature);
+    $decodedPayload = OgImageClient::decode($payload);
+    $signatureIsValid = OgImageClient::verifyIntegrity($payload, $signature);
 
     abort_unless($signatureIsValid, 400, 'Invalid signature.');
 
