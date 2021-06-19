@@ -4,7 +4,35 @@ namespace Flowframe\OgImageClient;
 
 class OgImageClient
 {
-    public function create(array $payload): string
+    public function generate(array $payload): string
+    {
+        $this->validate($payload);
+
+        $payload['url'] = isset($payload['url']) ? $payload['url'] : url(config('og-image-client.template_path'));
+
+        return $this->buildQuery($payload);
+    }
+
+    public function preview(array $payload)
+    {
+        $this->validate($payload);
+
+        return view($payload['template'], [
+            'payload' => $payload,
+        ]);
+    }
+
+    public function decode(string $payload): array
+    {
+        return json_decode(base64_decode($payload), true);
+    }
+
+    public function verifyIntegrity(string $payload, string $signature): bool
+    {
+        return $this->sign($payload) === $signature;
+    }
+
+    public function validate(array $payload): void
     {
         throw_unless($payload['template'], 'A template is required.');
 
@@ -14,37 +42,25 @@ class OgImageClient
 
         throw_unless(isset($payload['template']), 'A template is required in your payload.');
 
-        $payload['url'] = isset($payload['url']) ? $payload['url'] : url('_og-image');
-
-        return $this->createUrl($payload);
+        throw_unless(view()->exists($payload['template']), "View for template `{$payload['template']}` doesn't exist.");
     }
 
-    private function encodePayload(array $payload): string
+    public function buildQuery(array $payload): string
     {
-        return urlencode(json_encode($payload));
-    }
-
-    public function decodePayload(string $payload): array
-    {
-        return json_decode(urldecode($payload), true);
-    }
-
-    private function createUrl(array $payload): string
-    {
-        $encodedPayload = $this->encodePayload($payload);
-        $signature = $this->signPayload($payload);
+        $encodedPayload = $this->encode($payload);
+        $signature = $this->sign($encodedPayload);
         $url = config('og-image-client.url');
 
         return "{$url}?payload={$encodedPayload}&signature={$signature}";
     }
 
-    private function signPayload(array $payload): string
+    public function sign(string $payload): string
     {
-        return hash_hmac('sha256', json_encode($payload), config('og-image-client.secret_token'));
+        return hash_hmac('sha256', $payload, config('og-image-client.secret_token'));
     }
 
-    public function verifySignature(array $payload, string $signature): bool
+    public function encode(array $payload): string
     {
-        return $this->signPayload($payload) === $signature;
+        return base64_encode(json_encode($payload));
     }
 }

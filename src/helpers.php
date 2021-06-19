@@ -1,11 +1,11 @@
 <?php
 
-use Flowframe\OgImageClient\Facades\OgImageClient;
+use Flowframe\OgImageClient\OgImageClient;
 
 if (! function_exists('og')) {
-    function og(array $payload): string
+    function og(): OgImageClient
     {
-        return OgImageClient::create($payload);
+        return app(OgImageClient::class);
     }
 }
 
@@ -13,6 +13,6 @@ if (! function_exists('og')) {
 if (! function_exists('📸')) {
     function 📸(array $payload): string
     {
-        return OgImageClient::create($payload);
+        return og()->generate($payload);
     }
 }
